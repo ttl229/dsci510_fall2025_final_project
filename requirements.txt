@@ -1,0 +1,10 @@
+filename: requirements.txt
+
+
+beautifulsoup4==4.12.2
+# Requires BeautifulSoup v4
+
+json
+re
+requests
+sqlite3
