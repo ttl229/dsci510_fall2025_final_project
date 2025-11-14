@@ -1,6 +1,7 @@
 import sqlite3
 
 
+
 # Function to allow user to add entries to database
 def add_title_to_database(show_title: str, db_path: str, **kwargs) -> str:
     # kwargs: release_date, episodes, platform, genre, cast
@@ -54,19 +55,3 @@ def add_title_to_database(show_title: str, db_path: str, **kwargs) -> str:
 
 
 
-# def imdb_title_scraper(url) -> list
-#     all_titles = list # running list of all titles on the page
-#
-#     find header "actor" under "previous"
-#         if class = "ipc-metadata-list_summary-item__t"
-#
-#     is mini_series
-#
-#     if show_title and is mini_series
-#         title = " " # scrape the title from between the HTML tags
-#         add title to all_titles
-#
-#     return all_titles
-#
-# def count_titles() -> int
-#     count the number of unique titles in all_titles(url)
