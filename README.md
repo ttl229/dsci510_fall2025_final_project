@@ -1,3 +1,21 @@
 # dsci510_fall2025_final_project
 USC DSCI510
-This a dsci510 fall2025 final project.
+Project Tite: Vertical Mini Drama Database
+Status: This is a work in progress, more details to be provided
+Last updated: 11-13-2025
+
+Requirements: see requirements.txt
+Usage: a database for vertical mini-drama titles
+
+File Structure:
+src/
+  main.py
+  tests.py
+  functions.py
+  imdb_scraper.py
+db/
+  -> verticals_database.db.sql   # Database schema (does not contain data)
+documents/
+  -> progress report # Updated 11/13/25
+  -> database schema  # Visualization of Database schema
+
