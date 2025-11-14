@@ -14,8 +14,8 @@ src/
   functions.py
   imdb_scraper.py
 db/
-  -> verticals_database.db
+  -> verticals_database.db.sql   # Database schema (does not contain data)
 documents/
-  -> progress report
-  -> database schema
+  -> progress report # Updated 11/13/25
+  -> database schema  # Visualization of Database schema
 
