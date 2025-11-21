@@ -1,2 +1,21 @@
-results/
+.gitignore
+
+
+# System Files
+__pycache__
+.idea
+.env
+
+# Data
+kaggle.json
+kaggle.ipynb
 data/
+results/
+
+# Database
+verticals_database.db.sql
+
+# Keys
+keys/
+tmdb_key.txt
+youtube_key.txt
