@@ -1,8 +1,8 @@
+from src.package import database as db
+from src.package import youtube_scraper as youtube
 import sys
 
-from src.functions import add_title_to_database
-
-if __name__ == '__main__':
+def main():
     print("Library of Vertical Dramas (beta v.0)")
     filepath = '../data/verticals_database.db'
 
@@ -12,15 +12,20 @@ if __name__ == '__main__':
     if user_choice == 1:  # Allows user to add title to database
         print("Add Title to database")
         show_title = input("Title: ")
-        add_title_to_database(show_title, filepath)
+        db.add_title_to_database(show_title, filepath)
 
     # if user_choice == 2:  # Allows user to search the database
     #
     # if user_choice == 3:  # Allows user to analyze titles in database
+    #     print("")
 
     if user_choice == 4:  # Exits program
         print("Okay, goodbye.")
         sys.exit
+
+
+if __name__ == '__main__':
+    main()
 
 
 

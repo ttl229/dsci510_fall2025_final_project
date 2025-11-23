@@ -1,5 +1,16 @@
 import sqlite3
 
+# Function to import API key securely
+def connect_api_key(key_file: str)->str:  # Returns API key as string
+    try:
+        with open(key_file, "r") as f: # Reads API Key
+            key = f.readline().strip()
+        print(f"Using key file: {key_file}")
+        return key
+
+    except FileNotFoundError as e:
+        print(f"Could not find file {key_file}. Please check the filepath and try again.")
+        return None
 
 
 # Function to allow user to add entries to database
