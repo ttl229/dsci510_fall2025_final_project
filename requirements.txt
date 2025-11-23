@@ -8,3 +8,11 @@ json
 re
 requests
 sqlite3
+
+
+API
+youtube API
+
+
+# install YouTube API
+pip install google-api-python-client python-dotenv pandas

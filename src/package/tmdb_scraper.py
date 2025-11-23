@@ -1,15 +1,15 @@
 import requests
 import json
 
-def tmdb_get_release_date(title, url):
+def tmdb_get_release_date(title):
     search_item = title
-    key_file = "../keys/tmdb_key.txt"
+    key_file = "../../keys/tmdb_key.txt"
+    url = "https://api.themoviedb.org/3/search/movie"
 
     with open(key_file, "r") as f:  # Reads API key
         key = f.readline().strip()
         print(f"Using key from {key_file}")
 
-    search_url = f"https://api.themoviedb.org/3/search/movie"
     params = {'api_key': key, 'query': title}
 
     response = requests.get(url, params=params)
@@ -36,7 +36,6 @@ def tmdb_get_release_date(title, url):
         return None
 
 
-title = "Frankenstein"
-url = "https://www.themoviedb.org/movie/1062722-frankenstein?language=en-US"
-tmdb_get_release_date(title, url)
+search_term = "Frankenstein"
+tmdb_get_release_date(search_term)
 
