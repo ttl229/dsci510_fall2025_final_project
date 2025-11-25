@@ -1,15 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
 import json
-import re
+
 
 def clean_text(cell):
     return cell.get_text(strip=True) if cell else ""
 
 def imdb_title_scraper(url:str) -> str:
-    output_file = "imdb_titles.json"
     actor_name = input("Actor name: ")
-    credits = [] # empty dictionary to store actor credits in
+    output_file = f"{actor_name}_imdb_titles.json"
+    credits = [] # empty list to store actor credits in
 
     # Set a User-Agent to mimic a real browser
     headers = {
@@ -26,29 +26,54 @@ def imdb_title_scraper(url:str) -> str:
     soup = BeautifulSoup(response.content, "html.parser")
     print(f"Extracting {actor_name}'s previous titles from {url}")
 
-    # Locate the Actor Section to identify Previous Titles
-    actor_heading = soup.find('h3', string=lambda x: x and 'Actor' in x)
+    # 1. Locate the ACTOR section on page
+    actor_heading = soup.find(
+        "h3",
+        class_="ipc-title__text",
+        string=lambda x: x and "Actor" in x or "Actress" in x
+    )
+
     if not actor_heading:
         print(f"No acting credits found for {actor_name}")
-        return None
+        return
 
-    previous_header = (
-        actor_heading.find_next('li', string=lambda x: x and 'Previous' in x)
-    )
+    # 2. Locate PREVIOUS credits under ACTOR heading
+    previous_header = actor_heading.find_next(lambda tag: tag.name == "li" and "Previous" in tag.get_text(strip=True))
+
     if not previous_header:
         print(f"No previous titles found for {actor_name}")
+        return
 
-    previous_titles_list = previous_header.find_next('ul')
-    previous_titles = previous_titles_list.find_all('li')
+    # 3. Check to see if the credits page extends past first page
+    # see_all_link = previous_header.find_next("a", class_="ipc-see-more__text")
 
-    for item in previous_titles:
-        title_cell = item.find(class_="ipc-metadata-list-summary-item__t")
+    # if see_all_link:
+    #     titles_url = "https://www.imdb.com" + see_all_link["href"]
+    #
+    #     response = requests.get(titles_url, headers=headers)
+    #     response.raise_for_status()
+    #     soup = BeautifulSoup(response.content, "html.parser")
+    #     print(f"Extracting all previous acting title and roles for {actor_name}")
+
+        # Extracts all titles under the 'See All' list
+        # title_items = soup.find_all("li", class_="ipc-metadata-list-summary-item")
+
+    # 4. Locate first TITLE under PREVIOUS section
+    titles_list = previous_header.find_next("ul")
+    title_items = titles_list.find_all("li", recursive = False)
+
+    # 5. Extract title and role for actor
+    for item in title_items:
+        title_cell = item.find("a", class_="ipc-metadata-list-summary-item__t")
+        if title_cell is None:
+            continue # Skip rows containing other data
         title = clean_text(title_cell)
 
-        role_cell = item.find(class_="ipc-btn--not-interactable")
-        role = clean_text(role_cell)
+        role_cell = item.find("span", class_="ipc-btn--not-interactable")
+        role = clean_text(role_cell) if role_cell else ""
 
-        credits.append({"title": title, "role": role,}) # Adds title and role to dictionary
+        credits.append({"title": title, "role": role,})  # Adds title and role to credits list
+
 
     with open(output_file, 'w', encoding="utf-8") as f:
         json.dump(credits, f, indent=4)

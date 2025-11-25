@@ -1,49 +1,41 @@
 BEGIN TRANSACTION;
-DROP TABLE IF EXISTS "Cast";
-CREATE TABLE "Cast" (
-	"id"	INTEGER NOT NULL,
-	"name"	TEXT NOT NULL,
+
+CREATE TABLE IF NOT EXISTS "Cast" (
+	"id"	INTEGER PRIMARY KEY,
+	"name"	TEXT UNIQUE NOT NULL,
 	"number_titles"	INTEGER,
-	"number_followers"	NUMERIC,
-	PRIMARY KEY("id")
+	"number_followers"	NUMERIC
 );
-DROP TABLE IF EXISTS "Character_Type";
-CREATE TABLE "Character_Type" (
-	"id"	INTEGER NOT NULL,
-	"type"	TEXT NOT NULL,
-	PRIMARY KEY("id")
+CREATE TABLE IF NOT EXISTS "Character_Type" (
+	"id"	INTEGER PRIMARY KEY,
+	"type"	TEXT UNIQUE NOT NULL
 );
-DROP TABLE IF EXISTS "Genre";
-CREATE TABLE "Genre" (
-	"id"	INTEGER NOT NULL,
-	"genre"	TEXT,
-	PRIMARY KEY("id")
+CREATE TABLE IF NOT EXISTS "Genre" (
+	"id"	INTEGER PRIMARY KEY,
+	"genre"	TEXT UNIQUE NOT NULL
 );
-DROP TABLE IF EXISTS "Platforms";
-CREATE TABLE "Platforms" (
-	"id"	INTEGER NOT NULL,
-	"name"	TEXT NOT NULL,
-	PRIMARY KEY("id")
+CREATE TABLE IF NOT EXISTS "Platforms" (
+	"id"	INTEGER PRIMARY KEY,
+	"name"	TEXT UNIQUE NOT NULL
 );
-DROP TABLE IF EXISTS "Role";
-CREATE TABLE "Role" (
+CREATE TABLE IF NOT EXISTS "Role" (
+	"id"        INTEGER PRIMARY KEY,
 	"title_id"	INTEGER NOT NULL,
 	"cast_id"	INTEGER NOT NULL,
-	"type_id"	INTEGER,
+	"role"      TEXT UNIQUE NOT NULL,  -- name of the character in the show
+	"type_id"	INTEGER,  -- type of character ie. male protagonist, villain, etc
 	FOREIGN KEY("cast_id") REFERENCES "Cast"("id"),
 	FOREIGN KEY("title_id") REFERENCES "Titles"("id"),
 	FOREIGN KEY("type_id") REFERENCES "Character_Type"("id")
 );
-DROP TABLE IF EXISTS "Titles";
-CREATE TABLE "Titles" (
-	"id"	INTEGER NOT NULL,
-	"title"	INTEGER NOT NULL,
-	"release_date"	TEXT,
+CREATE TABLE IF NOT EXISTS "Titles" (
+	"id"	INTEGER PRIMARY KEY,
+	"title"	TEXT UNIQUE NOT NULL,
+	"release_date"	DATE,  -- date format yyyy-MM-dd
 	"episodes"	INTEGER,
 	"platform_id"	INTEGER,
 	"genre_id"	INTEGER,
 	"cast_id"	INTEGER,
-	PRIMARY KEY("id"),
 	FOREIGN KEY("cast_id") REFERENCES "Cast"("id"),
 	FOREIGN KEY("genre_id") REFERENCES "Genre"("id"),
 	FOREIGN KEY("platform_id") REFERENCES "Platforms"("id")
