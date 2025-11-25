@@ -14,9 +14,10 @@ data/
 results/
 
 # Database
-verticals_database.db.sql
+verticals_database.db
 
 # Keys
 keys/
 tmdb_key.txt
 youtube_key.txt
+
