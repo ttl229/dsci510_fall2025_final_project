@@ -6,11 +6,12 @@ import pandas as pd
 import re
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
-# from database import connect_api_key
+import os
+from src.package.database import connect_api_key
 
 def scrape_comments(video_id, api_key, max_comments)-> list[str]:
     """
-    Generates a list of of strings from the comments on a YouTube video, does not save to a file
+    Generates a list of strings from the comments on a YouTube video, does not save to a file
     """
     API_KEY = api_key
     youtube = build("youtube", "v3", developerKey=API_KEY)
@@ -49,13 +50,19 @@ def scrape_comments(video_id, api_key, max_comments)-> list[str]:
 
 
 
-
+# Extracts the words from comments on a Youtube Video and saves to a data file
 def load_comments(video_id: str, api_key: str, x) -> str:  # Returns filename
     API_KEY = api_key
     youtube = build("youtube", "v3", developerKey=API_KEY)
-    output_filepath = f'{video_id}_youtube_comments.csv'
+    output_file = f'{video_id}_youtube_comments.csv'
     number_of_comments = x # Extracts number of comments passed as argument
     comment_counter = 0 # Track total number of comments collected
+
+    # Saves output file in separate results folder
+    base_directory = os.path.join("..", "data")
+    output_folder = os.path.join(base_directory, "youtube_comments")
+    os.makedirs(output_folder, exist_ok=True)
+    output_file_path = os.path.join(output_folder, output_file)
 
     print(f"Retrieving max of {number_of_comments} comments for: {video_id}") # Verify video ID is
 
@@ -91,21 +98,21 @@ def load_comments(video_id: str, api_key: str, x) -> str:  # Returns filename
 
             df2 = pd.DataFrame({"comment_content": comments, "comment_date": dates, "user_name": user_names})
             df = pd.concat([df, df2], ignore_index=True)
-            df.to_csv(output_filepath, index=False, encoding = "utf-8")
+            df.to_csv(output_file_path, index=False, encoding = "utf-8")
             sleep(2)
             request = youtube.commentThreads().list_next(request, response)
             print("Iterating through next page...")
 
             total_comments = len(comments)
-            print(f"{total_comments} comments extracted to filepath: {output_filepath}")
+            print(f"{total_comments} comments extracted to filepath: {output_file_path}")
 
         except Exception as e:
             print(f"Error while loading comments: {e}")
 
-    if output_filepath:
-        return output_filepath
+    if output_file_path:
+        return output_file_path
     else:
-        return None
+        return ""
 
 
 # Function to count the top words used in comments per video
@@ -148,13 +155,18 @@ def count_words(video_id:str, number_of_words: int):
     return top_words
 
 # Word Cloud Generator
-def get_top_word_cloud(key_word, number_of_words)->str:
+def get_top_word_cloud(video_id: str, number_of_words: int):
     """
     Generates a word cloud of top most used words in comments pertaining to key_word (title, actor, platform etc)
     Returns the filename word cloud image
     """
-    text = key_word
+    key_location = input("key file path: ")
+    api_key = connect_api_key(key_location)
+    comments = scrape_comments(video_id, api_key, 1000)
+    text = " ".join(comments)
 
+
+    # Ignores common irrelevant words
     stopwords = set(STOPWORDS)
     stopwords.update("the", "is", "a")
 
@@ -168,7 +180,11 @@ def get_top_word_cloud(key_word, number_of_words)->str:
         ).generate(text)
 
         # Save the wordcloud as a file
-        filepath = str(f"{key_word[:5]}_wordcloud.png")
+        base_directory = os.path.join("..", "data")     # Saves the results under the data folder
+        output_folder = os.path.join(base_directory, "youtube_comments")
+        os.makedirs(output_folder, exist_ok=True)
+        filename = str(f"{video_id}_wordcloud.png")
+        filepath = os.path.join(output_folder, filename)
         wordcloud.to_file(filepath)
         print("Displaying word cloud...")
 
@@ -186,7 +202,7 @@ def get_top_word_cloud(key_word, number_of_words)->str:
     except Exception as e:
         print(f"Error generating word cloud. {e}")
 
-    return filepath
+    return
 
 # testing
 # video_id = "0SKOObeuGuA"

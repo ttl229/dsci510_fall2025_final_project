@@ -15,9 +15,13 @@ results/
 
 # Database
 verticals_database.db
+verticals_database.sqbpro
 
 # Keys
 keys/
 tmdb_key.txt
 youtube_key.txt
+
+# Tests
+testjupyter.ipynb
 

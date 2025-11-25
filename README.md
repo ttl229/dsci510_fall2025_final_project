@@ -53,3 +53,6 @@ project file (root):
 |   |--tests.py
 
 
+
+CHALLENGES:
+>>> When trying to extract instagram followers using HTML and Beautiful Soup, I discovered that Instagram does not allow scraping follower count. Need to download Selenium.

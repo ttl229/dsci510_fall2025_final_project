@@ -1,15 +1,22 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import os
 
 
 def clean_text(cell):
     return cell.get_text(strip=True) if cell else ""
 
-def imdb_title_scraper(url:str) -> str:
-    actor_name = input("Actor name: ")
+
+def imdb_title_scraper(url:str, actor_name) -> str:
     output_file = f"{actor_name}_imdb_titles.json"
     credits = [] # empty list to store actor credits in
+
+    # Saves output file in separate results folder
+    base_directory = os.path.join("..", "data")
+    output_folder = os.path.join(base_directory, "imdb_titles")
+    os.makedirs(output_folder, exist_ok=True)
+    output_file_path = os.path.join(output_folder, output_file)
 
     # Set a User-Agent to mimic a real browser
     headers = {
@@ -75,10 +82,10 @@ def imdb_title_scraper(url:str) -> str:
         credits.append({"title": title, "role": role,})  # Adds title and role to credits list
 
 
-    with open(output_file, 'w', encoding="utf-8") as f:
+    with open(output_file_path, 'w', encoding="utf-8") as f:
         json.dump(credits, f, indent=4)
 
-    print(len(credits), f" previous titles extracted for {actor_name} and saved to file:{output_file}")
+    print(len(credits), f" previous titles extracted for {actor_name} and saved to file:{output_file_path}")
 
     return output_file
 

@@ -10,7 +10,7 @@ def connect_api_key(key_file: str)->str:  # Returns API key as string
 
     except FileNotFoundError as e:
         print(f"Could not find file {key_file}. Please check the filepath and try again.")
-        return None
+        return ""
 
 
 # Function to allow user to add entries to database

@@ -3,6 +3,7 @@ from src.package import imdb_scraper as imdb
 from src.package.database import connect_api_key
 from src.package import youtube_scraper as youtube
 from src.package.youtube_scraper import scrape_comments, get_top_word_cloud
+import matplotlib
 
 # identifies current directory for accurate filepath access
 current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -16,21 +17,32 @@ current_directory = os.path.dirname(os.path.abspath(__file__))
 """
 Using function imdb_title_scraper(url: str) to gather previous titles for actor
 """
-url = "https://www.imdb.com/name/nm5879789/?ref_=fn_t_1"
-imdb.imdb_title_scraper(url)
+# print("Testing IMDB Scraper Function")
+# url = input("url: ")
+# imdb.imdb_title_scraper(url)
 
 
 # Testing API Key
-# filename = "youtube_key.txt"  # Replace with your key file name
-# key_file = os.path.join(current_directory, "..", "keys", filename)
-# api_key = connect_api_key(key_file)
+filename = "youtube_key.txt"  # Replace with your key file name
+key_file = os.path.join(current_directory, "..", "keys", filename)
+api_key = connect_api_key(key_file)
 
 # Testing YouTube Comment Scraper
-# video_id = "0SKOObeuGuA"
-# max_comments = 200
+# video_id = "diCMzPGyFNg"
+# max_comments = 1000
 # youtube.load_comments(video_id, api_key, max_comments)
 
 # Testing YouTube Word Cloud Generator
-# comments = scrape_comments(video_id, api_key, max_comments)
-# text = " ".join(comments)
-# get_top_word_cloud(text, 20)
+video_id = "g_C8mLNx6pU"
+comments = scrape_comments(video_id, api_key, 1000)
+text = " ".join(comments)
+get_top_word_cloud(video_id, 50)
+
+
+# Testing Instagram Scraper
+# url = "https://www.instagram.com"
+# print("Testing Instagram Scraper Function")
+# username = input("Username:")
+# get_ig_followers(username)
+
+
