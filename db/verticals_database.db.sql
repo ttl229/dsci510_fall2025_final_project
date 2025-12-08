@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS "Roles" (
 	"role"      TEXT NOT NULL,  -- name of the character in the show
 	"type_id"	INTEGER,        -- type of character ie. male protagonist, villain, etc
 	UNIQUE(title_id, role),      -- avoid duplicate entries of role+title combo (multiple titles okay)
-	FOREIGN KEY("actors_id") REFERENCES "Actors"("id"),
+	FOREIGN KEY("actor_id") REFERENCES "Actors"("id"),
 	FOREIGN KEY("title_id") REFERENCES "Titles"("id"),
 	FOREIGN KEY("type_id") REFERENCES "Character_Types"("id")
 );
