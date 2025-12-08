@@ -45,22 +45,11 @@ ANALYSIS
 
 
 DIRECTORY STRUCTURE: 
-- project file (root):
-- |__data/
-- |__db/                  ** database schema file located here
-- |__documents/           ** additional project documentation and files located here
-- |__keys/                ** example key folder naming convention below
-- |   |--youtube_key.txt
-- |__src/                 ** main.py located here
-- |   |--__init__.py
-- |   |--config.py
-- |   |--main.py
-- |   |--database.py      ** main program functions located here
-- |   |--results.ipynb    ** run in jupyter notebook for sample pipeline
-- |   |--tests.py
-- |   |__package          ** program modules located here
-- |__results/
-- |__tests/              
+- ROOT DIRECTORY (Project file 'deci510_fall2025_final_project')
+- SUBFOLDERS: data, db, documents, keys, src
+- SRC FILES: config.py, main.py, database.py, results.ipynb, tests.py
+- PACKAGES: src/package
+       
 
 
 CHALLENGES:
