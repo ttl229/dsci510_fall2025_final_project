@@ -1,21 +1,30 @@
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 
-text = """
-"""
 
-stopwords = set(STOPWORDS)
-stopwords.update("the", "is", "a")
+def create_word_cloud(text) -> WordCloud:
 
-wordcloud = WordCloud(
-    background_color="white",
-    max_words = 50,
-    stopwords = stopwords,
-    width = 600,
-    height = 400
-).generate(text)
+    stopwords = set(STOPWORDS)
+    stopwords.update("the", "is", "a")
 
-plt.figure(figsize=(10, 10))
-plt.imshow(wordcloud, interpolation="bilinear")
-plt.axis("off")
-plt.show()
+    wordcloud = WordCloud(
+        background_color="white",
+        max_words = 50,
+        stopwords = stopwords,
+        width = 600,
+        height = 400
+    ).generate(text)
+
+    print("Displaying word cloud...")
+
+    # Display generated word cloud as image
+    plt.figure(figsize=(10, 10))
+    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.axis("off")
+    plt.show(block=False)
+    plt.pause(2)
+    plt.close()
+
+    wordcloud_image = wordcloud
+
+    return wordcloud_image

@@ -1,9 +1,6 @@
 import os
-from src.package import imdb_scraper as imdb
-from src.package.database import connect_api_key
-from src.package import youtube_scraper as youtube
+from src.database import connect_api_key
 from src.package.youtube_scraper import scrape_comments, get_top_word_cloud
-import matplotlib
 
 # identifies current directory for accurate filepath access
 current_directory = os.path.dirname(os.path.abspath(__file__))

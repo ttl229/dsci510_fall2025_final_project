@@ -31,7 +31,7 @@ def imdb_title_scraper(url:str, actor_name) -> str:
         return None
 
     soup = BeautifulSoup(response.content, "html.parser")
-    print(f"Extracting {actor_name}'s previous titles from {url}")
+    print(f"...Extracting {actor_name}'s previous titles from {url}")
 
     # 1. Locate the ACTOR section on page
     actor_heading = soup.find(
@@ -50,20 +50,6 @@ def imdb_title_scraper(url:str, actor_name) -> str:
     if not previous_header:
         print(f"No previous titles found for {actor_name}")
         return
-
-    # 3. Check to see if the credits page extends past first page
-    # see_all_link = previous_header.find_next("a", class_="ipc-see-more__text")
-
-    # if see_all_link:
-    #     titles_url = "https://www.imdb.com" + see_all_link["href"]
-    #
-    #     response = requests.get(titles_url, headers=headers)
-    #     response.raise_for_status()
-    #     soup = BeautifulSoup(response.content, "html.parser")
-    #     print(f"Extracting all previous acting title and roles for {actor_name}")
-
-        # Extracts all titles under the 'See All' list
-        # title_items = soup.find_all("li", class_="ipc-metadata-list-summary-item")
 
     # 4. Locate first TITLE under PREVIOUS section
     titles_list = previous_header.find_next("ul")
@@ -85,7 +71,8 @@ def imdb_title_scraper(url:str, actor_name) -> str:
     with open(output_file_path, 'w', encoding="utf-8") as f:
         json.dump(credits, f, indent=4)
 
-    print(len(credits), f" previous titles extracted for {actor_name} and saved to file:{output_file_path}")
+    print(len(credits), f" previous titles extracted for {actor_name} and saved to file:")
+    print(f"'{output_file}'")
 
-    return output_file
+    return output_file_path
 

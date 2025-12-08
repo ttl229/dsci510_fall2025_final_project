@@ -1,8 +1,8 @@
 # dsci510_fall2025_final_project
 USC DSCI510
 Project Title: VMDB (Vertical Minidrama Database)
-Version: 0.1
-Last updated: 11-13-2025
+Version: 0.2
+Last updated: 12-07-25
 Usage: a database for vertical mini-drama titles
 
 DESCRIPTION:
@@ -16,8 +16,8 @@ GETTING STARTED:
 SET-UP:
 * Under project folder (parallel to src/) create following folders 'keys', 'data', 'db'
 * See Additional Project Details below for recommended project directory structure
-* Add your API keys to the 'keys' folder with structure 'platform_key.txt' (example: youtube_key.txt)
-* Run the code in 'setup.py' to initialize database from template schema
+* Add your API keys to the 'keys' folder with file name 'platform_key.txt' (example: youtube_key.txt)
+* To set up your database, run main.py and follow the prompts 
 
 
 RUNNING THE PROGRAM:
@@ -46,7 +46,6 @@ project file (root):
 |__src/             ** main.py located here
 |   |--config.py
 |   |--main.py
-|   |--setup.py
 |   |__package      ** program modules located here
 |__results/
 |__tests/           ** tests.py located here

@@ -7,7 +7,7 @@ import re
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 import os
-from src.package.database import connect_api_key
+
 
 def scrape_comments(video_id, api_key, max_comments)-> list[str]:
     """
@@ -64,7 +64,7 @@ def load_comments(video_id: str, api_key: str, x) -> str:  # Returns filename
     os.makedirs(output_folder, exist_ok=True)
     output_file_path = os.path.join(output_folder, output_file)
 
-    print(f"Retrieving max of {number_of_comments} comments for: {video_id}") # Verify video ID is
+    print(f"Retrieving max of {number_of_comments} comments for: {video_id}")
 
     request = youtube.commentThreads().list(
         part="snippet",
@@ -115,44 +115,6 @@ def load_comments(video_id: str, api_key: str, x) -> str:  # Returns filename
         return ""
 
 
-# Function to count the top words used in comments per video
-def count_words(video_id:str, number_of_words: int):
-    """
-    Returns a dictionary of the top number of words found in comments of a video
-    Example usage: Returns dictionary of top 10 most used words in comment section of a video
-    """
-    all_words = collections.Counter()
-    # List of basic words to ignore in counter
-    stop_words = ["the", "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "in", "out", "on", "off", "then", "once", "here", "there", "when", "how", "all", "any", "each", "few", "more", "most", "some", "such", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"]
-
-    try:
-        with open(f"{video_id}_youtube_comments.csv", "r", encoding="utf-8") as f:
-            print(f"Reading all words in comments from video with videoID: {video_id}...")
-            reader = csv.reader(f)
-            next(reader)  # Skips the header row
-
-            for row in reader:
-                comment_text = row[0]       # Extracts the contents from the 'comment_content' column
-                # Remove punctuation, special characters from words
-                cleaned_text = re.sub(r'[^\w\s]','', comment_text)
-                comment_words = cleaned_text.lower().split()
-
-                for word in comment_words:
-                    if word in stop_words: # Ignore common connector words
-                        continue
-                    if word: # Check for empty strings after cleaning
-                        all_words[word] += 1
-
-    except FileNotFoundError as e:
-        print(f"Could not find comment data file for {video_id}: {e}")
-        return collections.Counter() # Return empty counter
-
-    # Sorts the dictionary by top words
-    print(f"Sorting results by {number_of_words} most common words...")
-    top_words = all_words.most_common(number_of_words)
-    print(top_words)
-
-    return top_words
 
 # Word Cloud Generator
 def get_top_word_cloud(video_id: str, number_of_words: int):
