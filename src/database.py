@@ -72,6 +72,7 @@ Create, Update, Search, Etc
 def create_new_database(db: str, schema: str) ->  str:
     conn = None
     try:
+
         with open(schema, 'r') as f:
             sql_script = f.read()
 
@@ -104,7 +105,7 @@ def get_database() -> str:
         print("Could not locate existing database in project folder.\n Would you like to create new database file from schema? y/n")
         answer = input(" ")
         if answer == "y":
-            create_new_database(db_filename, schema_filepath)
+            create_new_database(db_filepath, schema_filepath)
 
         elif answer == "n":
             print("Please connect your database file to continue running program")
