@@ -335,11 +335,11 @@ def search_by_title(title: str):
         details_query = """
             SELECT 
                 Titles.title, Titles.release_date, Titles.episodes,
-                Platforms.name as platform,
+                Platforms.name AS platform,
                 json_group_array(json_object('actor', Actors.name, 'role', Roles.role)) AS actors
         
             FROM Titles
-            JOIN Platforms ON Platforms.id = Titles.platform_id
+            LEFT JOIN Platforms ON Platforms.id = Titles.platform_id
             LEFT JOIN Roles ON Roles.title_id = Titles.id
             LEFT JOIN Actors ON Actors.id = Roles.actor_id
     
@@ -350,11 +350,24 @@ def search_by_title(title: str):
         cursor.execute(details_query, (title_id,))
         title_details = cursor.fetchone()
 
-        for col, val in zip([d[0] for d in cursor.description], title_details):
+        print("DEBUG cursor.description: ", cursor.description)
+        print("DEBUG title_details: ", title_details)
+
+        # Catches incomplete title entries
+        if cursor.description is None:
+            print("No column metadata returned - check details_query.")
+            return None
+
+        columns = [d[0] for d in cursor.description]
+
+        for col, val in zip(columns, title_details):
             print(f"{col:15} : {val}")
+
+        return dict(zip(columns, title_details))
 
     except sqlite3.Error as e:
         print(f"Error occurred: {e}")
+        return None
 
     finally:
         conn.close()
