@@ -23,6 +23,7 @@ tmdb_key.txt
 youtube_key.txt
 
 # Tests
+tests/
 tests_data_update.py
 
 # Miscellaneous
