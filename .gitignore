@@ -23,5 +23,5 @@ tmdb_key.txt
 youtube_key.txt
 
 # Tests
-testjupyter.ipynb
+tests_data_update.py
 

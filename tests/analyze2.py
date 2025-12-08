@@ -33,7 +33,7 @@ def analyze_actor_hit_rates(db_path: str) -> pd.DataFrame:
     return df
 
 # Plot actors hit rates as bar graph
-def plot_all_hit_rate(df):
+def plot_all_hit_rates(df):
     # Sort so top hit_rate is first
     df_sorted = df.sort_values(by="hit_rate", ascending=False)
 
@@ -57,6 +57,6 @@ db_path = '../db/verticals_database.db'
 df_hits = analyze_actor_hit_rates(db_path)
 average_hit_rate = sum(df_hits["hit_rate"])/len(df_hits)
 print(average_hit_rate)
-plot_all_hit_rate(df_hits)
+plot_all_hit_rates(df_hits)
 
 # plot_top_10_hit_rate(df_hits)

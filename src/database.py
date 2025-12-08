@@ -2,7 +2,10 @@ from config import *
 import csv
 import collections
 import json
+import matplotlib.pyplot as plt
+import numpy as np
 import os
+import pandas as pd
 import re
 import sqlite3
 
@@ -12,7 +15,10 @@ db_filepath = os.path.join(DATABASE_DIRECTORY, db_filename)
 youtube_keyfile = os.path.join(KEYS_DIRECTORY, "youtube_key.txt")
 schema_filepath = os.path.join(DATABASE_DIRECTORY, "verticals_database.db.sql")
 
-
+"""
+GROUP 1:
+Basic Program Functions
+"""
 # Function to import API key securely
 def connect_api_key(key_file: str)->str:  # Returns API key as string
     try:
@@ -41,7 +47,26 @@ def clean_sql_text(column: str)->str:
         expression = f"REPLACE({expression}, '{p}', '')"
     return expression
 
+def save_results_to_file(data):
+    """Save the DATA as a file"""
+    print("Would you like to save result to file?")
+    answer = input("y/n: ")
 
+    if answer == 'y':
+        filename = input("Save file as: ")
+        filepath = os.path.join(DATA_DIRECTORY, filename)
+        data.to_file(filepath)
+        print(f"Data saved to file: {filepath}")
+
+    return None
+
+
+
+"""
+GROUP 2: 
+DATABASE Functions
+Create, Update, Search, Etc
+"""
 # Create new database from schema
 # Takes two argument: db (name of the db file you want to create) and schema (name of existing schema file)
 def create_new_database(db: str, schema: str) ->  str:
@@ -85,7 +110,6 @@ def get_database() -> str:
             print("Please connect your database file to continue running program")
 
     return ""
-
 
 
 # Function to allow user to add entries to database
@@ -358,6 +382,11 @@ def search_by_talent(actor: str):
         conn.close()
 
 
+
+"""
+GROUP 3:
+Analyzing Data Functions
+"""
 # Function to count the top words used in comments per video
 def count_words(video_id:str, number_of_words: int):
     """
@@ -398,18 +427,121 @@ def count_words(video_id:str, number_of_words: int):
 
     return top_words
 
-def save_results_to_file(data):
-    """Save the DATA as a file"""
-    print("Would you like to save result to file?")
-    answer = input("y/n: ")
 
-    if answer == 'y':
-        filename = input("Save file as: ")
-        filepath = os.path.join(DATA_DIRECTORY, filename)
-        data.to_file(filepath)
-        print(f"Data saved to file: {filepath}")
 
-    return None
+# Function to analyze actor hit rates
+def analyze_actor_hit_rates(db_filepath: str) -> pd.DataFrame:
+    # Defines a 'hit' as a title with over >50M views
+    # Hit rate = Actor's total hits / Actor's total titles
+    conn = sqlite3.connect(db_filepath)
+
+    query = """
+    SELECT
+        a.id AS actor_id,
+        a.name AS actor_name,
+        COUNT(*) AS total_titles,
+        SUM(CASE WHEN t.views > 50000000 THEN 1 ELSE 0 END) AS total_hits,
+        ROUND(
+            1.0 * SUM(CASE WHEN t.views > 50000000 THEN 1 ELSE 0 END) 
+            / COUNT(*), 
+            3
+        ) AS hit_rate,
+        ROUND(AVG(t.views), 0) AS avg_views,
+        MAX(t.views) AS max_views
+    FROM Roles r
+    JOIN Titles t ON r.title_id = t.id
+    JOIN Actors a ON a.id = r.actor_id
+    GROUP BY a.id
+    ORDER BY hit_rate DESC;
+    """
+
+    df = pd.read_sql_query(query, conn)
+    df = df.dropna() # Clean data ignore Null values
+
+    conn.close()
+    return df
+
+# Plot actors hit rates as bar graph
+def plot_all_hit_rates(df):
+    # Sort so top hit_rate is first
+    df_sorted = df.sort_values(by="hit_rate", ascending=False)
+
+    # Get only the top 10 actors
+    top10 = df_sorted.head(15)
+
+    plt.figure(figsize=(12, 6))
+    plt.bar(top10["actor_name"], top10["hit_rate"], color='skyblue')
+
+    plt.title("Top Actors By Hit Rates (Hit Title > 50M Views)", fontsize=14)
+    plt.xlabel("Actor Name", fontsize=12)
+    plt.ylabel("Hit Rate", fontsize=12)
+    plt.xticks(rotation=45, ha="right")
+
+    plt.ylim(0, 1)   # hit rate is between 0 and 1
+    plt.tight_layout()
+    plt.show()
+
+    return
+
+
+# Compare Views of a Title to Actors Follower Count
+def compare_followers_vs_views(db_filepath:str)-> pd.DataFrame:
+    conn = sqlite3.connect(db_filepath)
+
+    query = """
+    SELECT Titles.id, Titles.title, Titles.views, SUM(Actors.number_followers) AS actors_popularity
+    FROM Roles
+    JOIN Actors ON Roles.actor_id = Actors.id
+    JOIN Titles ON Roles.title_id = Titles.id
+    WHERE Actors.number_followers IS NOT NULL AND Titles.views IS NOT NULL
+    GROUP BY Titles.id;
+    """
+
+    try:
+        df = pd.read_sql_query(query, conn)
+        print("Processing query...")
+
+        joined_df = df[['title', 'views', 'actors_popularity']]
+        joined_df = joined_df.reset_index(drop=True)
+
+    except sqlite3.OperationalError as e:
+        print(f"Error: {e}")
+        raise
+
+    finally:
+        conn.close()
+
+    # Compute correlation coefficient
+    correlation = df['actors_popularity'].corr(df['views'])
+    print(f"Correlation coefficient: {correlation:.4f}")
+
+    return joined_df
+
+
+def create_scatterplot(df):
+    # Create a visual scatterplot from dataframe object
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.scatter(df['actors_popularity'], df['views'])
+
+    ax.set_xlabel("Cast popularity (followers in thousands)")
+    ax.set_ylabel("Show popularity (views in millions)")
+    ax.set_title("Cast Popularity vs Show Popularity")
+    ax.grid(True)
+
+    # --- X-axis ticks (in thousands) ---
+    x_ticks = [0, 100_000, 200_000, 300_000, 400_000, 500_000]
+    ax.set_xticks(x_ticks)
+    ax.set_xticklabels([f"{x // 1000}k" for x in x_ticks])
+
+    # --- Y-axis ticks (in millions) ---
+    y_ticks = [0, 20_000_000, 40_000_000, 60_000_000,
+               80_000_000, 100_000_000, 120_000_000,
+               140_000_000, 160_000_000]
+    ax.set_yticks(y_ticks)
+    ax.set_yticklabels([f"{y // 1_000_000}M" for y in y_ticks])
+
+    plt.show()
+
 
 # Return to menu
 def main_menu():
