@@ -1,18 +1,11 @@
 filename: requirements.txt
 
-
 beautifulsoup4==4.12.2
-# Requires BeautifulSoup v4
-
-json
-re
+google-api-python-client
+matplotlib
+numpy
+pandas
+python-dotenv
 requests
-sqlite3
-
-
-API
-youtube API
-
-
-# install YouTube API
-pip install google-api-python-client python-dotenv pandas
+selenium
+webdriver-manager

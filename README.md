@@ -6,7 +6,7 @@ Last updated: 12-07-25
 Usage: a database for vertical mini-drama titles
 
 DESCRIPTION:
-* This database is in beta mode and currently being updated. 
+* This database is in beta mode. 
 * The purpose of this database is to track vertical minidrama shows for insight analysis.
 
 GETTING STARTED:
@@ -19,38 +19,48 @@ SET-UP:
 * Add your API keys to the 'keys' folder with file name 'platform_key.txt' (example: youtube_key.txt)
 * To set up your database, run main.py and follow the prompts 
 
-
-RUNNING THE PROGRAM:
-Step 1. 
+HOW TO RUN:
+Requirements: requirements.txt
+From terminal: Run main.py
+From Jupyter Notebook: Run 'results.ipynb' for sample pipeline
 
 
 ---- ADDITIONAL PROJECT DETAILS -----
 
 DATA SOURCES
-
+Data Source 1: IMDB.com
+Data Source 2: Instagram.com
+Data Source 3: YouTube.com
 
 RESULTS
+Loaded database with 300 show titles, 100 actors
+Manually added attributes such as genres, role types, view counts due to lack of centralized data
+
 
 
 ANALYSIS
+- Compared effect of follower count of actors on the overall popularity of show
+- Generated word clouds to depict user sentiment for various titles
+- Generate list of top actors by hit-rate
 
 
 DIRECTORY STRUCTURE: 
 project file (root):
 |__data/
-|__db/              ** database schema file located here
-|__documents/       ** additional project documentation and files located here
-|__keys/            ** example key folder naming convention below
+|__db/                  ** database schema file located here
+|__documents/           ** additional project documentation and files located here
+|__keys/                ** example key folder naming convention below
 |   |--youtube_key.txt
-|    |--tmdb_key.txt
-|__src/             ** main.py located here
+|__src/                 ** main.py located here
+|   |--__init__.py
 |   |--config.py
 |   |--main.py
-|   |__package      ** program modules located here
-|__results/
-|__tests/           ** tests.py located here
+|   |--database.py      ** main program functions located here
+|   |--results.ipynb    ** run in jupyter notebook for sample pipeline
 |   |--tests.py
-
+|   |__package          ** program modules located here
+|__results/
+|__tests/              
 
 
 CHALLENGES:

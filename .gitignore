@@ -25,3 +25,6 @@ youtube_key.txt
 # Tests
 tests_data_update.py
 
+# Miscellaneous
+anaconda_projects
+.ipynb_checkpoints

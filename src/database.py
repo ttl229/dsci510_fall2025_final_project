@@ -294,6 +294,14 @@ def add_content_to_db(table_name: str, column_name: str, content):
             conn.commit()
             return
 
+        else:
+            sql_query = f"INSERT INTO {table_name} ({column_name}) VALUES (?)"
+            cursor.execute(sql_query, (insert_value,))
+
+        print(f"Successfully updated '{column_name}' (column) in '{table_name}' (Table)")
+        conn.commit()
+        return
+
     except Exception as e:
         print(f"Error occurred: {e}")
 
@@ -547,7 +555,7 @@ def create_scatterplot(df):
 def main_menu():
 
     # Print Main Menu Options
-    print("~~ Menu ~~\n  1. Add Title  \n  2. Search Titles  \n  3. Analyze Titles  \n  4. Quit\n")
+    print("~~ Menu ~~\n  1. Add Title  \n  2. Search Titles  \n  3. Quit\n")
     user_choice = int(input(" "))
 
     if user_choice == 1:  # Allows user to add title to database
@@ -576,9 +584,6 @@ def main_menu():
             case _:
                 print("Please select one of the options above or type 'Menu' to return to main menu.")
 
-    # if user_choice == 3:  # Allows user to analyze titles in database
-    #     print("Select an option:\n 1. ")
-
-    if user_choice == 4:  # Exits program
+    if user_choice == 3:  # Exits program
         print("Okay, goodbye.")
         exit(0)

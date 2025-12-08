@@ -1,4 +1,4 @@
-from src.database import main_menu, get_database
+from database import main_menu, get_database
 
 
 def main():

@@ -1,6 +1,5 @@
 import os
 
-
 # identifies current directory for project file path mapping
 current_directory = os.path.dirname(os.path.abspath(__file__))
 # current_directory is also where main.py is located
@@ -19,9 +18,10 @@ KEYS_DIRECTORY = os.path.join(PROJECT_ROOT_DIRECTORY, "keys")
 DATABASE_DIRECTORY = os.path.join(PROJECT_ROOT_DIRECTORY, "db")
 schema_file = os.path.join(DATABASE_DIRECTORY, "verticals_database.db.sql")
 
-# data sources configuration
+# API Configuration
+# How to get YouTube API Key: https://developers.google.com/youtube/v3/getting-started
 
-
-
-# Other Links
-# https://www.verticaldramalove.com/vertical-drama-love-fan-survey-2025
+# Data Source configuration
+youtube_URL = "https://www.youtube.com/watch?v="
+imdb_URL = "https://www.imdb.com/"
+instagram_URL = "https://www.instagram.com/"
