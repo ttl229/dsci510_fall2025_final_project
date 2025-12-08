@@ -340,8 +340,8 @@ def search_by_title(title: str):
         
             FROM Titles
             JOIN Platforms ON Platforms.id = Titles.platform_id
-            JOIN Roles ON Roles.title_id = Titles.id
-            JOIN Actors ON Actors.id = Roles.actor_id
+            LEFT JOIN Roles ON Roles.title_id = Titles.id
+            LEFT JOIN Actors ON Actors.id = Roles.actor_id
     
             WHERE Titles.id = ?
             GROUP BY Titles.id
